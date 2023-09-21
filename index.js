@@ -1,11 +1,23 @@
 const express = require("express");
 const app = express();
+var server = require("http").Server(app);
+var io = require("socket.io")(server);
 const port = 3000;
 
-app.get('/', (req, res) => {        //get requests to the root ("/") will route here
-    res.sendFile('index.html', {root: __dirname});      //server responds by sending the index.html file to the client's browser//the .sendFile method needs the absolute path to the file, see: https://expressjs.com/en/4x/api.html#res.sendFile
+let TempData = []
+
+server.listen(3000, ()=>{
+    console.log("successfully listening on Port 3000")
+})
+
+io.on('connection', function(socket) {
+    socket.on('temp data', (data)=>{
+        console.log('Received Temperature Data: ', data);
+
+        TempData.push({
+            temp_c: data.temp_c,
+            temp_f: data.temp_f
+        })
+    });
 });
 
-app.listen(port, () => {            //server starts listening for any attempts from a client to connect at port: {port}
-    console.log(`Now listening on port ${port}`);
-});
