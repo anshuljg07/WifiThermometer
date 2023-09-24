@@ -1,15 +1,35 @@
 import time
 import os
+from twilio.rest import Client as smsClient
 import board
 import digitalio
 import adafruit_character_lcd.character_lcd as character_lcd
 from w1thermsensor import W1ThermSensor, Sensor
 
-from socketIO_client_nexus import SocketIO,LoggingNamespace #TODO: download this new package
+
+#from socketIO_client_nexus import SocketIO,LoggingNamespace #TODO: download this new package
+from socketio import Client
 from threading import Thread
 import logging
 
 sensor = W1ThermSensor(Sensor.DS18B20)
+sio = Client()
+
+#phone number shit 
+#account_sid = os.environ['ACd7d90d03508c25c4e2b171168bff40be']
+#auth_token = os.environ[]
+smsClient = smsClient('ACd7d90d03508c25c4e2b171168bff40be','c2d3f36c8d94d1bacfbb4ed8399b9353')
+
+message = smsClient.messages.create(
+		body='Test',
+		from_='+18665165495',
+		to='+13198550125'
+		)
+		
+print(message.sid)
+#end of phone number 
+
+
 
 def initHardware():
 	lcd_rs = digitalio.DigitalInOut(board.D26)
@@ -39,13 +59,23 @@ def transmitThread(tempf, tempc):
 		'temp_c': tempc,
 		'temp_f': tempf
 	}
+	sio.emit('temp data', payload)
+	'''
+	print("Attempting Connection")
 	with SocketIO('172.17.7.178', 3000, LoggingNamespace) as socketIO:
+		print("Connected")
 		socketIO.emit('temp data', payload)
-		socketIO.wait(seconds=1)
-
+		print('Sent Data: ', payload)
+		#socketIO.wait(seconds=1)
+	print("Finished Connection")
+	'''
+@sio.on('connect')
+def on_connect():
+	print('Connected')
 
 if __name__ == "__main__":
 	lcd = initHardware()
+	sio.connect('http://172.17.7.178:3000')
 
 	while True:
 		time.sleep(1)
@@ -61,6 +91,7 @@ if __name__ == "__main__":
 		except Exception as e:
 			print(e)
 			print("not working")
+	sio.disconnect()
 
 #lcd= GpioLCD(rs_pin=Pin(37), enable_pin=Pin(35), d4_pin=Pin(33), d5_pin=Pin(31), d6_pin=Pin(29), d7_pin=Pin(23), num_lines=2, numcolumns=16)
 
