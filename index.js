@@ -11,13 +11,13 @@ let TempData = []
 //server's static files dervied from public folder
 app.use('/public', express.static('public'));
 
-// server.listen(3000, '172.17.7.178', ()=>{
-//     console.log("successfully listening on Port 3000 w/ IP: 172.17.7.178")
-// });
-
-server.listen(3000, '192.168.0.10', ()=>{
+server.listen(3000, '172.17.39.169', ()=>{
     console.log("successfully listening on Port 3000 w/ IP: 172.17.7.178")
 });
+
+// server.listen(3000, '192.168.0.10', ()=>{
+//     console.log("successfully listening on Port 3000 w/ IP: 172.17.7.178")
+// });
 
 app.get('/', (req, res) => {        //get requests to the root ("/") will route here
     res.sendFile('./views/index.html', {root: __dirname});      //server responds by sending the index.html file to the client's browser
@@ -47,6 +47,7 @@ io.on('connection', function(socket) {
         });
 
         //TODO: Test index.js --> script.js socket communication
+        console.log('Attempting to send to FrontEnd Socket room')
         io.to('frontend').emit('newData', data)
     });
 });
