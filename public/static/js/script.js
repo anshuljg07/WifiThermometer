@@ -25,7 +25,6 @@ let tempChart = new Chart(ctx, {
     }
 });
 
-//TODO: Test if index.js -> script.js newData update works.
 socket.on('newData', (data) => {
     console.log('FrontEnd Received: ', data)
     temperatureData.labels.push(data.timestamp)

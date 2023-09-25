@@ -27,7 +27,6 @@ app.get('/', (req, res) => {        //get requests to the root ("/") will route 
 io.on('connection', function(socket) {
     console.log("New Client has connected")
 
-    //TODO: Test Socket Source Determination
     socket.on('clientType', function(type) {
         if(type == 'raspberryPi'){
             console.log('raspberryPi has connected')
@@ -46,7 +45,6 @@ io.on('connection', function(socket) {
             temp_f: data.temp_f
         });
 
-        //TODO: Test index.js --> script.js socket communication
         console.log('Attempting to send to FrontEnd Socket room')
         io.to('frontend').emit('newData', data)
     });
