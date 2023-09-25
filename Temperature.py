@@ -4,6 +4,7 @@ import board
 import digitalio
 import adafruit_character_lcd.character_lcd as character_lcd
 from w1thermsensor import W1ThermSensor, Sensor
+from datetime import datetime
 
 
 #from socketIO_client_nexus import SocketIO,LoggingNamespace #TODO: download this new package
@@ -14,6 +15,7 @@ import logging
 sensor = W1ThermSensor(Sensor.DS18B20)
 sio = Client()
 
+'''
 #phone number shit 
 #account_sid = os.environ['ACd7d90d03508c25c4e2b171168bff40be']
 #auth_token = os.environ[]
@@ -27,7 +29,7 @@ message = smsClient.messages.create(
 		
 print(message.sid)
 #end of phone number 
-
+'''
 
 
 def initHardware():
@@ -53,10 +55,13 @@ def updateLCDThread(lcd, tempf, tempc):
     lcd.message = f'{tempc}'
 
 def transmitThread(tempf, tempc):
+	timestamp = datetime.now()
+	strtime = timestamp.strftime("%H:%M:%S")
 	payload = {
 		'title': 'transmit temp',
 		'temp_c': tempc,
-		'temp_f': tempf
+		'temp_f': tempf,
+		'timestamp' : strtime
 	}
 	sio.emit('temp data', payload)
 	'''
@@ -71,21 +76,25 @@ def transmitThread(tempf, tempc):
 @sio.on('connect')
 def on_connect():
 	print('Connected')
+	
 
 if __name__ == "__main__":
 	lcd = initHardware()
-	sio.connect('http://172.17.7.178:3000')
+	sio.connect('http://172.17.39.169:3000')
 
 	#TODO: Test new socket identifier
-	sio.emit('clientType').emit('raspberryPi')
+	sio.emit('clientType', 'raspberryPi')
 
 	while True:
-		time.sleep(1)
+		time.sleep(0.15)
 		try:
 			temp_c = sensor.get_temperature()
 			temp_f  = temp_c  *(9/5) + 32
+			
+			
 			thread_lcd = Thread(target = updateLCDThread, args = (lcd, temp_f, temp_c, ))
 			thread_transmit = Thread(target = transmitThread, args = (temp_f, temp_c, ))
+			
 			thread_lcd.start()
 			thread_transmit.start()
 			# updateLCDThread(temp_f, temp_c)
