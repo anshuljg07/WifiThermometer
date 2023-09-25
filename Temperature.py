@@ -1,5 +1,4 @@
 import time
-import os
 from twilio.rest import Client as smsClient
 import board
 import digitalio
@@ -76,6 +75,9 @@ def on_connect():
 if __name__ == "__main__":
 	lcd = initHardware()
 	sio.connect('http://172.17.7.178:3000')
+
+	#TODO: Test new socket identifier
+	sio.emit('clientType').emit('raspberryPi')
 
 	while True:
 		time.sleep(1)
