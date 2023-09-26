@@ -1,9 +1,9 @@
-let socket = io.connect('http://172.17.19.239:3000');
+let socket = io.connect('http:// 172.17.4.165:3000');
 socket.emit('clientType', 'frontend');
 
 let ctx = document.getElementById('temperatureChart').getContext('2d');
 let temperatureData = {
-    labels: [],  // Sample months for demonstration
+    labels: [0,100,200,300],  // Sample months for demonstration
     datasets: [{
         label: 'Temperature (°C)',
         data: [],  // Sample temperature data for demonstration
@@ -12,6 +12,9 @@ let temperatureData = {
         fill: false
     }]
 };
+function convertClick(){
+    document.getElementById("convert").textContent = "convert to C"
+}
 $(function () {
     $("#chartContainer").resizable({
         aspectRatio: true,
@@ -24,14 +27,7 @@ $(function () {
 
     });
 });
-function Myupdate(chart){
-    for(var i = 0;i<=300;i++)
-    {
-        if(i == 0 || i == 100 || i == 200|| i==300){
-            chart.data.labels.push(i)
-        }
-    }
-}
+
 
 let tempChart = new Chart(ctx, {
     type: 'line',
@@ -54,13 +50,13 @@ let tempChart = new Chart(ctx, {
         }
     }
 });
-Myupdate(tempChart)
+
 socket.on('newData', (data) => {
     console.log('FrontEnd Received: ', data)
     temperatureData.labels.push(data.timestamp)
     temperatureData.datasets[0].data.push(data.temp_c);
 
-    if(temperatureData.labels.length > 180){ //updates on 10 datapoints, check lab specs
+    if(temperatureData.labels.length > 300){ //updates on 10 datapoints, check lab specs
         temperatureData.labels.shift();
         temperatureData.datasets[0].data.shift();
     }

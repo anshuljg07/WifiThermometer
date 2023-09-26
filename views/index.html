@@ -28,13 +28,15 @@
             text-decoration: none;
             font-size: 20px;
             color: #818181;
-            display: block;
+            display: inline-block;
+            margin: auto;
             border: none;
             background: none;
             width:100%;
-            text-align: left;
+            text-align: center;
             cursor: pointer;
             outline: none;
+
         }
 
 
@@ -43,9 +45,9 @@
 <body>
 <div >
     <div class="sidenav">
-        <button class = ".btn"> button
-
+        <button id = "convert" class = ".btn" onclick="convertClick()"style="margin-left: 80px"> convert to F
         </button>
+
     </div>
 
     <div id = "chartContainer" style = "border:3px solid gray;display: block;margin-right:40vh;max-width: 83vw;max-height:95vh">
