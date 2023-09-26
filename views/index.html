@@ -1,16 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joseph's Temperature</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/jquery-ui.1.11.2.min.js"></script>
+    <script src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <style>
+        .sidenav {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            right: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        /* Style the sidenav links and the dropdown button */
+        .btn {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+            border: none;
+            background: none;
+            width:100%;
+            text-align: left;
+            cursor: pointer;
+            outline: none;
+        }
+
+
+    </style>
 </head>
 <body>
-<div>
-    <canvas id="temperatureChart" width="400" height="200"></canvas>
+<div >
+    <div class="sidenav">
+        <button class = ".btn"> button
+
+        </button>
+    </div>
+
+    <div id = "chartContainer" style = "border:3px solid gray;display: block;margin-right:40vh;max-width: 83vw;max-height:95vh">
+    <canvas id="temperatureChart"></canvas>
     <script src="/public/static/js/script.js"></script>
+
+    </div>
 </div>
 </body>
 </html>

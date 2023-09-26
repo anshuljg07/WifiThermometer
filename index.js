@@ -11,7 +11,7 @@ let TempData = []
 //server's static files dervied from public folder
 app.use('/public', express.static('public'));
 
-server.listen(3000, '172.17.39.169', ()=>{
+server.listen(3000, '172.17.19.239', ()=>{
     console.log("successfully listening on Port 3000 w/ IP: 172.17.7.178")
 });
 

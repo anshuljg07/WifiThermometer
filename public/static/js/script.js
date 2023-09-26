@@ -1,4 +1,4 @@
-let socket = io.connect('http://172.17.39.169:3000');
+let socket = io.connect('http://172.17.19.239:3000');
 socket.emit('clientType', 'frontend');
 
 let ctx = document.getElementById('temperatureChart').getContext('2d');
@@ -8,23 +8,53 @@ let temperatureData = {
         label: 'Temperature (°C)',
         data: [],  // Sample temperature data for demonstration
         borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 1,
+        borderWidth: 2,
         fill: false
     }]
 };
+$(function () {
+    $("#chartContainer").resizable({
+        aspectRatio: true,
+        // maxHeight: 500,
+        distance: 10,
+        // animate: true,
+        // animateDuration: "fast",
+        // animateEasing: "swing",
+        // autoHide: true,
+
+    });
+});
+function Myupdate(chart){
+    for(var i = 0;i<=300;i++)
+    {
+        if(i == 0 || i == 100 || i == 200|| i==300){
+            chart.data.labels.push(i)
+        }
+    }
+}
 
 let tempChart = new Chart(ctx, {
     type: 'line',
     data: temperatureData,
     options: {
+        animationEnabled: true,
+        responsive: true,
         scales: {
             y: {
+                max: 50,
+                min: 10,
                 beginAtZero: true
+            },
+            x:{
+                max: 300,
+                min: 0,
+                stepSize: 100,
+                maxTicksLimit: 3
             }
         }
     }
 });
-
+Myupdate(tempChart)
 socket.on('newData', (data) => {
     console.log('FrontEnd Received: ', data)
     temperatureData.labels.push(data.timestamp)
