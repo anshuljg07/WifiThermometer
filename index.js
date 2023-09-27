@@ -11,7 +11,7 @@ let TempData = []
 //server's static files dervied from public folder
 app.use('/public', express.static('public'));
 
-server.listen(3000, '172.17.67.110', ()=>{
+server.listen(3000, '172.17.66.142', ()=>{
     console.log("successfully listening on Port 3000 w/ IP: 172.17.7.178")
 });
 
@@ -31,6 +31,9 @@ io.on('connection', function(socket) {
         if(type == 'raspberryPi'){
             console.log('raspberryPi has connected')
             socket.join('raspberryPi')
+
+            //TEST: to send master switch state
+            //io.to('raspberryPi').emit('master switch state', {title:"rafa sucks penis"})
         }
         else if(type == 'frontend')
             console.log('frontend has connected')
@@ -48,6 +51,11 @@ io.on('connection', function(socket) {
         console.log('Attempting to send to FrontEnd Socket room')
         io.to('frontend').emit('newData', data)
     });
+
+    socket.on('master switch state', (data) =>{
+        console.log('Master Switch State Change Received From FrontEnd')
+        io.to('raspberryPi').emit('master switch state', data)
+    })
 });
 
 

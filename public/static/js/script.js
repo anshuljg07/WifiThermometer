@@ -1,6 +1,8 @@
-let socket = io.connect('http://172.17.67.110:3000');
+let socket = io.connect('http://172.17.66.142:3000');
 socket.emit('clientType', 'frontend');
 
+masterSwitchBool = true;
+globalPhoneNumber = '';
 
 let ctx = document.getElementById('temperatureChart').getContext('2d');
 let temperatureDataC = {
@@ -42,7 +44,6 @@ function convertClickF(){
     document.getElementById("variableDisplayC").style.color = null
     document.getElementById("variableDisplayF").style.color = 'white'
 
-
 }
 $(function () {
     $("#chartContainer").resizable({
@@ -55,8 +56,43 @@ $(function () {
     });
 });
 
+    function GetPhoneNumber(){
+        var tempPhone = document.getElementById("phoneNumber")
+        var pattern = /^\+1-\d{3}-\d{3}-\d{2}-\d{2}$/;
+        if(pattern.test(tempPhone)){
+            console.log('Phone: ' + phone);
+        }
+    }
+    function formatPhoneNumber() {
+
+    // let phoneNumber = input.value.replace(/[^0-9\+\-]/g, '');
+    //
+    // // Add a +1 at the beginning if it's not already there
+    // if (!phoneNumber.startsWith('+1-') || phoneNumber == '') {
+    // phoneNumber = '+1-' + phoneNumber;
+    // }
+    //
+    // // Apply the formatting based on the length
+    // if (phoneNumber.length == 6) {
+    //     phoneNumber = phoneNumber + '-';
+    // }
+    //
+    // if (phoneNumber.length == 9) {
+    //     phoneNumber = phoneNumber + '-';
+    // }
+    //
+    // if (phoneNumber.length == 12) {
+    //     phoneNumber = phoneNumber.substring(0,11);
+    // }
+    // input.value = phoneNumber;
+}
 
 
+
+    function masterSwitchState(){
+        masterSwitchBool = !masterSwitchBool;
+        socket.emit('master switch state', {masterSwitchState: masterSwitchBool})
+    }
 
 let tempChart = new Chart(ctx, {
     type: 'line',

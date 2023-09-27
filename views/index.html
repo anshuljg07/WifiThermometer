@@ -55,6 +55,14 @@
 
         <p id="variableDisplayF" style="color: black"></p>
 
+        <label for="phoneNumber" style="color: white;">Please insert valid 10 digit US phone number:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" oninput="formatPhoneNumber();">
+
+        <button id = "inputPhone" class = ".btn" onclick="GetPhoneNumber()"style="margin-left: 80px"> Enter
+        </button>
+
+        <button id = "MasterSwitch" class = ".btn" onclick="masterSwitchState()"style="margin-left: 80px"> Master Switch
+        </button>
 
     </div>
 
