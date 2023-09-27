@@ -17,7 +17,7 @@
             z-index: 1;
             top: 0;
             right: 0;
-            background-color: #111;
+            background-color: black;
             overflow-x: hidden;
             padding-top: 20px;
         }
@@ -45,12 +45,20 @@
 <body>
 <div >
     <div class="sidenav">
-        <button id = "convert" class = ".btn" onclick="convertClick()"style="margin-left: 80px"> convert to F
+        <button id = "convertC" class = ".btn" onclick="convertClickC()"style="margin-left: 80px"> convert to C
         </button>
+
+        <button id = "convertF" class = ".btn" onclick="convertClickF()"style="margin-left: 80px"> convert to F
+        </button>
+
+        <p id="variableDisplayC" style="color: white"></p>
+
+        <p id="variableDisplayF" style="color: black"></p>
+
 
     </div>
 
-    <div id = "chartContainer" style = "border:3px solid gray;display: block;margin-right:40vh;max-width: 83vw;max-height:95vh">
+    <div id = "chartContainer" style = "border:3px solid black;display: block;margin-right:40vh;max-width: 83vw;max-height:85vh">
     <canvas id="temperatureChart"></canvas>
     <script src="/public/static/js/script.js"></script>
 
