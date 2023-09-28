@@ -14,7 +14,7 @@
 
             width: 100vw;
             height: 80px;
-            background-color: darkgray;
+            background-color: lightslategrey;
 
             font-family: Arial,serif;
         }
@@ -117,7 +117,7 @@
             height: 90%;
             border-width: 4px;
             border-style: solid;
-            border-color: red;
+            border-color: darkslateblue;
             margin-left: 3%;
             display: inline;
             text-align: center;
@@ -133,7 +133,7 @@
             height: 90%;
             border-width: 4px;
             border-style: solid;
-            border-color: green;
+            border-color: darkorange;
             text-align: center;
             display: inline;
             font-family: Arial,monospace;
@@ -142,33 +142,33 @@
             transition-duration: 0.4s;
         }
         .convertToggleC:hover {
-            background-color: red; /* Green */
+            background-color: darkslateblue; /* Green */
             color: white;
             box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
         }
         .convertToggleF:hover {
-            background-color: green; /* Green */
+            background-color: darkorange; /* Green */
             color: white;
             box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
         }
         .convertToggleF:active {
-            background-color: green;
+            background-color: darkorange;
             box-shadow: 0 5px #666;
             transform: translateY(4px);
         }
         .convertToggleC:active {
-            background-color: red;
+            background-color: darkslateblue;
             box-shadow: 0 5px #666;
             transform: translateY(4px);
         }
         .phoneTextField{
-            height: 60px;
+            height: 30px;
             width: 160px;
+            margin-bottom: 15px;
         }
         .textField{
-            margin-top: 15px;
-            height:45%;
-            margin-left: 4%;
+            height:80%;
+            margin-left: 5%;
         }
         .masterButtonDiv{
             height: 60px;
@@ -200,7 +200,23 @@
             box-shadow: 0 5px #666;
             transform: translateY(4px);
         }
+        .threshold{
+            height: 60px;
+            width: 160px;
+            display: inline;
+        }
+        .textFieldMin{
+            margin-top: 10%;
+            margin-left: 5%;
+            width: 40%;
+            margin-bottom: 3%;
+        }
+        .textFieldMax{
+            margin-top: 10%;
 
+            width: 39%;
+            margin-bottom: 3%;
+        }
 
 
 
@@ -235,6 +251,10 @@
                     </button>
                     <button class = "convertToggleF" id = "convertToggleF"onclick="convertClickF()"> F°
                     </button>
+                </div>
+                <div class = "threshold">
+                    <label for="min"style="font-size: 10px"></label><input placeholder="min" class ="textFieldMin" type="text" id="min"  oninput="formatThresholdMin();" maxlength="3" >
+                    <label for="max"style="font-size: 10px"></label><input placeholder="max" class ="textFieldMax" type="text" id="max"  oninput="formatThresholdMax();" maxlength="3" >
                 </div>
                 <div class = "phoneTextField" id = "phoneTextField">
                     <label for="phoneNumber"style="font-size: 10px"></label><input placeholder="Phone Number" class ="textField" type="text" id="phoneNumber" name="phoneNumber" oninput="formatPhoneNumber();" maxlength="12" >

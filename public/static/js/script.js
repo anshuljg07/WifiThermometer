@@ -12,7 +12,7 @@ let temperatureDataC = {
     datasets: [{
         label: 'Temperature (°C)',
         data: [],  // Sample temperature data for demonstration
-        borderColor: 'rgba(255, 0, 0, 1)',
+        borderColor: 'rgba(40, 30, 150, 1)',
         borderWidth: 4,
         fill: false,
         pointRadius: 1,
@@ -24,31 +24,94 @@ let temperatureDataF = {
     datasets: [{
         label: 'Temperature (°F)',
         data: [],  // Sample temperature data for demonstration
-        borderColor: 'rgba(0, 255, 0, 1)',
+        borderColor: 'rgba(210, 130, 00, 1)',
         borderWidth: 4,
         fill: false,
         pointRadius: 1,
     }]
 };
+globalFoptions ={
+    animation:
+        {
+            duration: 0,
+        },
+    responsive: true,
+    scales: {
+        y: {
+            position: 'right',
+            max: 122,
+            min: 50,
+            beginAtZero: true,
+            title:{
+                display:true,
+                text:"Temperature"
+            }
+        },
+        x:{
+            reverse: true,
+            min: 0,
+            max: 300,
+            stepSize: 100,
+            maxTicksLimit: 3,
+            title:{
+                display:true,
+                text:"Seconds Ago"
+            }
+        }
+    },
+}
+globalCoptions ={
+    animation:
+        {
+            duration: 0,
+        },
+    responsive: true,
+    scales: {
+        y: {
+            position: 'right',
+            max: 50,
+            min: 10,
+            beginAtZero: true,
+            title:{
+                display:true,
+                text:"Temperature"
+            }
+
+        },
+        x:{
+            reverse: true,
+            min: 0,
+            max: 300,
+            stepSize: 100,
+            maxTicksLimit: 3,
+            title:{
+                display:true,
+                text:"Seconds Ago"
+            }
+
+        }
+    },
+}
+
 function convertClickC(){
     tempChart.data = temperatureDataC
-    tempChart.options.scales.y.max = 50
-    tempChart.options.scales.y.min = 10
+    tempChart.options = globalCoptions
+    //tempChart.options.scales.x.reverse = true;
     tempChart.update()
 
 }
 
 function convertClickF(){
     tempChart.data = temperatureDataF
-    tempChart.options.scales.y.max = 122
-    tempChart.options.scales.y.min = 50
+    tempChart.options = globalFoptions
+    //tempChart.options.scales.x.reverse = true;
     tempChart.update()
 
 }
 $(function () {
     $("#chartContainer").resizable({
         aspectRatio: true,
-        minHeight : 500,
+        minHeight : 300,
         // maxHeight: 500,
         distance: 10,
 
@@ -58,12 +121,29 @@ $(function () {
 
 
     function GetPhoneNumber(){
+
         var tempPhone = document.getElementById("phoneNumber").value
+        var tempMin = document.getElementById("min").value
+        var tempMax = document.getElementById("max").value
+        data = {
+            phone: tempPhone,
+            min:tempMin,
+            max:tempMax
+        }
         var pattern = /^\d{3}-\d{3}-\d{4}$/;
         if(pattern.test(tempPhone)){
-            socket.emit('phone number', tempPhone);
+            socket.emit('phone number', data);
+            console.log(data.phone + " " + data.min + " " + data.max)
         }
         //socket.emit('phone number', tempPhone);
+    }
+    function formatThresholdMin(){
+        var input = document.querySelector('#min')
+        input.value = input.value.replace(/[^0-9-]/g,'')
+    }
+    function formatThresholdMax(){
+        var input = document.querySelector('#min')
+        input.value = input.value.replace(/[^0-9-]/g,'')
     }
     function formatPhoneNumber() {
 
@@ -103,16 +183,16 @@ $(function () {
 
 
     function masterSwitchState(){
-        if( document.getElementById("MasterSwitch").innerText== "OFF") {
+        if( document.getElementById("MasterSwitch").innerText== "ON") {
             console.log("off")
-            document.getElementById("MasterSwitch").style.background = "green"
-            document.getElementById("MasterSwitch").textContent = "ON"
-            document.getElementById("MasterSwitch").innerText = "ON"
-        }else{
-            console.log("on")
             document.getElementById("MasterSwitch").style.background = "red"
             document.getElementById("MasterSwitch").textContent = "OFF"
             document.getElementById("MasterSwitch").innerText = "OFF"
+        }else{
+            console.log("on")
+            document.getElementById("MasterSwitch").style.background = "green"
+            document.getElementById("MasterSwitch").textContent = "ON"
+            document.getElementById("MasterSwitch").innerText = "ON"
         }
         masterSwitchBool = !masterSwitchBool;
         socket.emit('master switch state', {masterSwitchState: masterSwitchBool})
@@ -132,14 +212,21 @@ let tempChart = new Chart(ctx, {
                 position: 'right',
                 max: 50,
                 min: 10,
-                beginAtZero: true
+                beginAtZero: true,
+                title:{
+                    display:true,
+                    text:"Temperature"
+                }
             },
             x:{
                 reverse: true,
                 min: 0,
                 max: 300,
                 stepSize: 100,
-                maxTicksLimit: 3
+                maxTicksLimit: 3,title:{
+                    display:true,
+                    text:"Seconds Ago"
+                }
             }
         },
     }
@@ -182,7 +269,7 @@ function dropDown(){
 function updateVariable(tempData) {
 
     document.getElementById("temperature").textContent = tempData.temp_c;
-    if(tempData.temp_c === 'NO DATA AVAILABLE' || tempData.temp_c === 'SENSOR DISCONNECTED'){
+    if(tempData.temp_c == 'NO DATA AVAILABLE' || tempData.temp_c == 'Sensor Disconnected'){
         document.getElementById("status").textContent =  tempData.temp_c;
         document.getElementById("statusButton").style.background= "red"
     }else{

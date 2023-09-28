@@ -4,7 +4,8 @@ const socketIo = require("socket.io");
 
 var twilio = require('twilio');
 var client = new twilio('ACd7d90d03508c25c4e2b171168bff40be', 'a99d31fd80bf05d005994453e10eb1ab');
-
+globalMax = '50'
+globalMin = '10'
 globalPhoneNumber = '';
 
 const app = express();
@@ -49,14 +50,14 @@ io.on('connection', function(socket) {
         console.log('Received Temperature Data: ', data);
 
         if(globalPhoneNumber !== ''){
-            if(data.temp_c > 50){
+            if(data.temp_c > parseInt(globalMax)){
                 client.messages.create({
                     to: globalPhoneNumber,
                     from: '+18665165495',
                     body: 'Temperature above 50'
                 }).then(r => console.log('message sent'))
             }
-            else if(data.temp_c < 0){
+            else if(data.temp_c < parseInt(globalMin)){
                 client.messages.create({
                     to: globalPhoneNumber,
                     from: '+18665165495',
@@ -76,16 +77,17 @@ io.on('connection', function(socket) {
     });
 
     socket.on('master switch state', (data) =>{
-        console.log('Master Switch State Change Received From FrontEnd ')
+        console.log('Master Switch State Change Received From FrontEnd ' + data.masterSwitchState)
         io.to('raspberryPi').emit('master switch state', data)
     })
 
     socket.on('phone number', (data) =>
     {
 
-        globalPhoneNumber = '+1' + data.replace(/-/g, '')
-
-        console.log('phone number Updated')
+        globalPhoneNumber = '+1' + data.phone.toString().replace(/-/g, '')
+        globalMax = data.max
+        globalMin = data.min
+        console.log('phone number Updated'+globalMax+" " +globalMin+ " " + globalPhoneNumber)
 
 
 
