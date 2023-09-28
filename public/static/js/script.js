@@ -5,7 +5,7 @@ socket.emit('clientType', 'frontend');
 
 masterSwitchBool = true;
 
-
+GlobalC = true;
 let ctx = document.getElementById('temperatureChart').getContext('2d');
 let temperatureDataC = {
     labels: new Array(300),  // Sample months for demonstration
@@ -96,16 +96,25 @@ globalCoptions ={
 function convertClickC(){
     tempChart.data = temperatureDataC
     tempChart.options = globalCoptions
-    //tempChart.options.scales.x.reverse = true;
+    tempChart.options.scales.x.reverse = true;
+    tempChart.data.datasets[0].data.reverse()
+
+    GlobalC = true
     tempChart.update()
+    tempChart.data.datasets[0].data.reverse()
+
 
 }
 
 function convertClickF(){
     tempChart.data = temperatureDataF
     tempChart.options = globalFoptions
-    //tempChart.options.scales.x.reverse = true;
+    tempChart.options.scales.x.reverse = true;
+    tempChart.data.datasets[0].data.reverse()
+    GlobalC = false;
     tempChart.update()
+    tempChart.data.datasets[0].data.reverse()
+
 
 }
 $(function () {
@@ -114,6 +123,7 @@ $(function () {
         minHeight : 300,
         // maxHeight: 500,
         distance: 10,
+
 
 
     });
@@ -216,16 +226,22 @@ let tempChart = new Chart(ctx, {
                 title:{
                     display:true,
                     text:"Temperature"
-                }
+                },
+
             },
             x:{
                 reverse: true,
                 min: 0,
                 max: 300,
-                stepSize: 100,
-                maxTicksLimit: 3,title:{
+                beginAtZero: true,
+                title:{
                     display:true,
                     text:"Seconds Ago"
+                },
+                ticks:{
+                    max:300,
+                    stepSize:1
+
                 }
             }
         },
@@ -267,8 +283,14 @@ function dropDown(){
     }
 }
 function updateVariable(tempData) {
+    console.log(GlobalC)
+    if(GlobalC){
+        document.getElementById("temperature").textContent = tempData.temp_c;
 
-    document.getElementById("temperature").textContent = tempData.temp_c;
+    }else{
+        document.getElementById("temperature").textContent = tempData.temp_f;
+
+    }
     if(tempData.temp_c == 'NO DATA AVAILABLE' || tempData.temp_c == 'Sensor Disconnected'){
         document.getElementById("status").textContent =  tempData.temp_c;
         document.getElementById("statusButton").style.background= "red"
