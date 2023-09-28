@@ -76,7 +76,7 @@ io.on('connection', function(socket) {
     });
 
     socket.on('master switch state', (data) =>{
-        console.log('Master Switch State Change Received From FrontEnd')
+        console.log('Master Switch State Change Received From FrontEnd ')
         io.to('raspberryPi').emit('master switch state', data)
     })
 

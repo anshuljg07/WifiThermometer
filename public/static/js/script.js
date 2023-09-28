@@ -103,6 +103,17 @@ $(function () {
 
 
     function masterSwitchState(){
+        if( document.getElementById("MasterSwitch").innerText== "OFF") {
+            console.log("off")
+            document.getElementById("MasterSwitch").style.background = "green"
+            document.getElementById("MasterSwitch").textContent = "ON"
+            document.getElementById("MasterSwitch").innerText = "ON"
+        }else{
+            console.log("on")
+            document.getElementById("MasterSwitch").style.background = "red"
+            document.getElementById("MasterSwitch").textContent = "OFF"
+            document.getElementById("MasterSwitch").innerText = "OFF"
+        }
         masterSwitchBool = !masterSwitchBool;
         socket.emit('master switch state', {masterSwitchState: masterSwitchBool})
     }
