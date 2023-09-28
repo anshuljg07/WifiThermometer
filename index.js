@@ -2,6 +2,11 @@ const express = require("express");
 const http = require("http"); // Import the http module
 const socketIo = require("socket.io");
 
+var twilio = require('twilio');
+var client = new twilio('ACd7d90d03508c25c4e2b171168bff40be', 'a99d31fd80bf05d005994453e10eb1ab');
+
+globalPhoneNumber = '';
+
 const app = express();
 const server = http.createServer(app); // Create an HTTP server using Express
 const io = socketIo(server); // Attach Socket.io to the server
@@ -43,6 +48,24 @@ io.on('connection', function(socket) {
     socket.on('temp data', (data)=>{
         console.log('Received Temperature Data: ', data);
 
+        if(globalPhoneNumber !== ''){
+            if(data.temp_c > 50){
+                client.messages.create({
+                    to: globalPhoneNumber,
+                    from: '+18665165495',
+                    body: 'Temperature above 50'
+                }).then(r => console.log('message sent'))
+            }
+            else if(data.temp_c < 0){
+                client.messages.create({
+                    to: globalPhoneNumber,
+                    from: '+18665165495',
+                    body: 'Temperature below 0'
+                }).then(r => console.log('message sent'))
+            }
+        }
+
+
         TempData.push({
             temp_c: data.temp_c,
             temp_f: data.temp_f
@@ -55,6 +78,17 @@ io.on('connection', function(socket) {
     socket.on('master switch state', (data) =>{
         console.log('Master Switch State Change Received From FrontEnd')
         io.to('raspberryPi').emit('master switch state', data)
+    })
+
+    socket.on('phone number', (data) =>
+    {
+
+        globalPhoneNumber = '+1' + data.replace(/-/g, '')
+
+        console.log('phone number Updated')
+
+
+
     })
 });
 

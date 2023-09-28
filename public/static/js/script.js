@@ -1,8 +1,10 @@
+
+
 let socket = io.connect('http://172.17.66.142:3000');
 socket.emit('clientType', 'frontend');
 
 masterSwitchBool = true;
-globalPhoneNumber = '';
+
 
 let ctx = document.getElementById('temperatureChart').getContext('2d');
 let temperatureDataC = {
@@ -10,7 +12,7 @@ let temperatureDataC = {
     datasets: [{
         label: 'Temperature (°C)',
         data: [],  // Sample temperature data for demonstration
-        borderColor: 'rgba(255, 99, 132, 1)',
+        borderColor: 'rgba(255, 0, 0, 1)',
         borderWidth: 4,
         fill: false,
         pointRadius: 1,
@@ -22,7 +24,7 @@ let temperatureDataF = {
     datasets: [{
         label: 'Temperature (°F)',
         data: [],  // Sample temperature data for demonstration
-        borderColor: 'rgba(0, 99, 132, 1)',
+        borderColor: 'rgba(0, 255, 0, 1)',
         borderWidth: 4,
         fill: false,
         pointRadius: 1,
@@ -32,8 +34,7 @@ function convertClickC(){
     tempChart.data = temperatureDataC
     tempChart.options.scales.y.max = 50
     tempChart.options.scales.y.min = 10
-    document.getElementById("variableDisplayF").style.color = null
-    document.getElementById("variableDisplayC").style.color = "white"
+    tempChart.update()
 
 }
 
@@ -41,8 +42,7 @@ function convertClickF(){
     tempChart.data = temperatureDataF
     tempChart.options.scales.y.max = 122
     tempChart.options.scales.y.min = 50
-    document.getElementById("variableDisplayC").style.color = null
-    document.getElementById("variableDisplayF").style.color = 'white'
+    tempChart.update()
 
 }
 $(function () {
@@ -56,14 +56,27 @@ $(function () {
     });
 });
 
+
     function GetPhoneNumber(){
-        var tempPhone = document.getElementById("phoneNumber")
-        var pattern = /^\+1-\d{3}-\d{3}-\d{2}-\d{2}$/;
+        var tempPhone = document.getElementById("phoneNumber").value
+        var pattern = /^\d{3}-\d{3}-\d{4}$/;
         if(pattern.test(tempPhone)){
-            console.log('Phone: ' + phone);
+            socket.emit('phone number', tempPhone);
         }
+        //socket.emit('phone number', tempPhone);
     }
     function formatPhoneNumber() {
+
+        var phoneNumber = document.querySelector('#phoneNumber')
+
+        phoneNumber.value = phoneNumber.value.replace(/[^0-9-]/g, '');
+
+        phoneNumber.addEventListener('keyup', function(e){
+            if (event.key != 'Backspace' &&
+                (phoneNumber.value.length === 3 || phoneNumber.value.length === 7)){
+                phoneNumber.value += '-';
+            }
+        })
 
     // let phoneNumber = input.value.replace(/[^0-9\+\-]/g, '');
     //
@@ -146,14 +159,26 @@ function loadLabels(){
 
 //todo
 
+function dropDown(){
+    if(document.getElementById("#content").style.display == "none"){
+        document.getElementById("#content").style.display = "block"
 
+    }else{
+        document.getElementById("#content").style.display = "none"
+
+    }
+}
 function updateVariable(tempData) {
 
-    document
-        .getElementById("variableDisplayC").textContent = `Variable Value:` + tempData.temp_c;
+    document.getElementById("temperature").textContent = tempData.temp_c;
+    if(tempData.temp_c === 'NO DATA AVAILABLE' || tempData.temp_c === 'SENSOR DISCONNECTED'){
+        document.getElementById("status").textContent =  tempData.temp_c;
+        document.getElementById("statusButton").style.background= "red"
+    }else{
+        document.getElementById("status").textContent = `OPERATIONAL`;
+        document.getElementById("statusButton").style.background = "green"
+    }
 
-    document
-        .getElementById("variableDisplayF").textContent = `Variable Value:` + tempData.temp_f;
 }
 
 //todo
