@@ -12,7 +12,10 @@ from socketio import Client
 from threading import Thread, Event
 import logging
 
-#create try/while to continue connecting to the sensor
+sio = Client()
+boolMasterSwitch = True
+global sensor
+
 
 '''
 #phone number shit 
@@ -29,6 +32,28 @@ message = smsClient.messages.create(
 print(message.sid)
 #end of phone number 
 '''
+@sio.on('connect')
+def on_connect():
+	print('Connected')
+
+@sio.on('*')
+def catch_all_server(event, data):
+	global boolMasterSwitch
+	if event == 'master switch state':
+		print(data)
+		print('type is :',type(data['masterSwitchState']))
+		boolMasterSwitch = bool(data['masterSwitchState'])
+		
+
+'''	
+@sio.on('master switch state')
+def on_masterSwitchState():
+	print("Master switch state received")
+'''
+
+	
+
+
 def transmitSensorDisconnected  (event: Event) -> None:
 	while(True):
 		if event.is_set():
@@ -42,7 +67,7 @@ def transmitSensorDisconnected  (event: Event) -> None:
 		'timestamp' : strtime
 		}
 		
-		sio.emit('sensor disconnected', payload)
+		sio.emit('temp data', payload)
 		time.sleep(1)
 
 def initHardware():
@@ -53,21 +78,31 @@ def initHardware():
 	lcd_d5 = digitalio.DigitalInOut(board.D24)
 	lcd_d4 = digitalio.DigitalInOut(board.D25)
 	
-	#create physical switch input
+	lcd_rs.direction = digitalio.Direction.OUTPUT
+	lcd_en.direction = digitalio.Direction.OUTPUT
+	lcd_d7.direction = digitalio.Direction.OUTPUT
+	lcd_d6.direction = digitalio.Direction.OUTPUT
+	lcd_d5.direction = digitalio.Direction.OUTPUT
+	lcd_d4.direction = digitalio.Direction.OUTPUT
 	
-	#create physical button input
+	#create physical switch input D14
+	physicalSwitchPin = digitalio.DigitalInOut(board.D14)
+	physicalSwitchPin.direction = digitalio.Direction.INPUT
 	
-	#create LCD output supply pin
-	
-	boolTransmitPin = digitalio.DigitalInOut(board.D15)
-	boolTransmitPin.direction = digitalio.Direction.INPUT
+	#create physical button input D23
+	physicalButtonPin = digitalio.DigitalInOut(board.D23)
+	physicalButtonPin.direction = digitalio.Direction.INPUT
 	
 
+	
+	
+	
+	print('inside init')
 	lcd_columns=16
 	lcd_rows=2
 	lcd = character_lcd.Character_LCD_Mono(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows)
 	lcd.message=f'Temp (F):  \nTemp (C):  '
-	return lcd, boolTransmitPin.value
+	return lcd, physicalSwitchPin.value, physicalButtonPin.value
 
 def updateLCDThread(lcd, tempf, tempc):
     lcd.cursor_position(10,0)
@@ -75,11 +110,12 @@ def updateLCDThread(lcd, tempf, tempc):
     lcd.cursor_position(10,1)
     lcd.message = f'{tempc}'
 
-def transmitThread(tempf, tempc, booltransmit):
+def transmitThread(tempf, tempc, transmitNull):
 	timestamp = datetime.now()
 	strtime = timestamp.strftime("%H:%M:%S")
 	
-	if booltransmit:
+	
+	if transmitNull:
 		payload = {
 		'title': 'transmit temp',
 		'temp_c': tempc,
@@ -89,24 +125,27 @@ def transmitThread(tempf, tempc, booltransmit):
 	else:
 		payload = {
 		'title': 'transmit temp',
-		'temp_c': 'gang gang',
-		'temp_f': 'rafa is racist',
+		'temp_c': 'NO DATA AVAILABLE',
+		'temp_f': 'NO DATA AVAILABLE',
 		'timestamp' : strtime
 		}
 		
 	sio.emit('temp data', payload)
 
 def connectDS18B20():
+	tempsensor = None
 	try:
-		sensor = W1ThermSensor(Sensor.DS18B20)
+		tempsensor = W1ThermSensor(Sensor.DS18B20)
+		return tempsensor
 	except Exception as e:
 		event = Event()
 		sensorDisconnectedThread = Thread(target = transmitSensorDisconnected, args = (event,))
 		sensorDisconnectedThread.start()
-		while(sensor is None):
+		while(tempsensor is None):
 			try:
-				sensor = W1ThermSensor(Sensor.DS18B20)
+				tempsensor = W1ThermSensor(Sensor.DS18B20)
 				event.set()
+				return tempsensor
 			except:
 				print("Trying to connect to DS18B20")
 	'''
@@ -121,30 +160,50 @@ def connectDS18B20():
 	
 
 if __name__ == "__main__":
-	connectDS18B20()
-	sio = Client()
-	sio.connect('http://172.17.67.110:3000')
-
-	#TODO: Test new socket identifier
+	sio.connect('http://172.17.66.142:3000')
 	sio.emit('clientType', 'raspberryPi')
+	
+	LCDPowerPin = digitalio.DigitalInOut(board.D13)
+	LCDPowerPin.direction = digitalio.Direction.OUTPUT
+
+	
+	LCDPowerPin.value = 1
+	lcd, boolSwitch, boolButton = initHardware()
 
 	while True:
-		time.sleep(0.15)
+		sensor = connectDS18B20()
+		time.sleep(1)
 		try:
+			#print(boolMasterSwitch)
 			temp_c = sensor.get_temperature()
 			temp_f  = temp_c  *(9/5) + 32
 			
-			lcd, boolTransmit = initHardware()
-			print("boolTransmit = ", boolTransmit)
+			lcd, boolSwitch, boolButton = initHardware()
+			
+			LCDPowerPin.value = 1
+			print('bool switch:', boolSwitch, '\tboolButton:', boolButton, '\tLCDPowerpin', LCDPowerPin.value)
+			
+			
 			
 			#Master switch & physical switch & Button must be True for LCD
-			thread_lcd = Thread(target = updateLCDThread, args = (lcd, temp_f, temp_c, ))
+			if(boolMasterSwitch and boolSwitch and boolButton):
+				print('displaying on LCD')
+				thread_lcd = Thread(target = updateLCDThread, args = (lcd, temp_f, temp_c, ))
+				thread_lcd.start()
+			else:
+				pass
+				#LCDPowerPin.value = False
 			
 			#Sending ANY Temperature data Physical Switch & Master Switch must be True
 				#else send NO DATA AVAILABLE in temp fields of JSON
-			thread_transmit = Thread(target = transmitThread, args = (temp_f, temp_c, boolTransmit, ))
+			if(boolMasterSwitch and boolSwitch):
+				
+				thread_transmit = Thread(target = transmitThread, args = (temp_f, temp_c, True, ))
+			else:
+				thread_transmit = Thread(target = transmitThread, args = (temp_f, temp_c, False, ))
+				
 			
-			thread_lcd.start()
+			#thread_lcd.start()
 			thread_transmit.start()
 			# updateLCDThread(temp_f, temp_c)
 			# transmitThread(temp_f, temp_c)
@@ -153,9 +212,7 @@ if __name__ == "__main__":
 			print("not working")
 	sio.disconnect()
 
-@sio.on('connect')
-def on_connect():
-	print('Connected')
+
 #lcd= GpioLCD(rs_pin=Pin(37), enable_pin=Pin(35), d4_pin=Pin(33), d5_pin=Pin(31), d6_pin=Pin(29), d7_pin=Pin(23), num_lines=2, numcolumns=16)
 
 
