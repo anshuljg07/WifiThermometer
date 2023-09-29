@@ -3,10 +3,12 @@ const http = require("http"); // Import the http module
 const socketIo = require("socket.io");
 
 var twilio = require('twilio');
-var client = new twilio('ACd7d90d03508c25c4e2b171168bff40be', 'a99d31fd80bf05d005994453e10eb1ab');
+var client = new twilio('AC42b61828e45f10eff9a37e81bf20e8f5', '9dcb922ad936132158e32b6c31964d48');
 globalMax = '50'
 globalMin = '10'
-globalPhoneNumber = '';
+globalPhoneNumber = '+13198550125'
+messageSent = false
+globalC = true
 
 const app = express();
 const server = http.createServer(app); // Create an HTTP server using Express
@@ -30,6 +32,7 @@ app.get('/', (req, res) => {        //get requests to the root ("/") will route 
                                                         //the .sendFile method needs the absolute path to the file, see: https://expressjs.com/en/4x/api.html#res.sendFile
 });
 
+
 io.on('connection', function(socket) {
     console.log("New Client has connected")
 
@@ -47,25 +50,47 @@ io.on('connection', function(socket) {
     });
 
     socket.on('temp data', (data)=>{
-        console.log('Received Temperature Data: ', data);
+        //console.log('Received Temperature Data: ', data); //TODO: uncomment later
 
-        if(globalPhoneNumber !== ''){
-            if(data.temp_c > parseInt(globalMax)){
-                client.messages.create({
-                    to: globalPhoneNumber,
-                    from: '+18665165495',
-                    body: 'Temperature above 50'
-                }).then(r => console.log('message sent'))
+
+
+        if(globalPhoneNumber !== '' && !messageSent){
+            console.log('valid phone number ' + globalPhoneNumber)
+            if(globalC){
+                if(data.temp_c > parseInt(globalMax)){
+                    console.log('above max ')
+                    client.messages.create({
+                        to: globalPhoneNumber,
+                        from: '+18663385272',
+                        body: 'Max exceeded'
+                    })            }
+                if(data.temp_c < parseInt(globalMin)){
+                    client.messages.create({
+                        to: globalPhoneNumber,
+                        from: '+18663385272',
+                        body: 'Min exceeded'
+                    }).then(r => console.log('Min exceeded: message sent'))
+                }
             }
-            else if(data.temp_c < parseInt(globalMin)){
-                client.messages.create({
-                    to: globalPhoneNumber,
-                    from: '+18665165495',
-                    body: 'Temperature below 0'
-                }).then(r => console.log('message sent'))
+            else{
+                if(data.temp_f > parseInt(globalMax)){
+                    console.log('above max ')
+                    client.messages.create({
+                        to: globalPhoneNumber,
+                        from: '+18663385272',
+                        body: 'Max exceeded'
+                    })            }
+                if(data.temp_f < parseInt(globalMin)){
+                    client.messages.create({
+                        to: globalPhoneNumber,
+                        from: '+18663385272',
+                        body: 'Min exceeded'
+                    }).then(r => console.log('Min exceeded: message sent'))
+                }
             }
+
+            messageSent = true;
         }
-
 
         TempData.push({
             temp_c: data.temp_c,
@@ -83,14 +108,12 @@ io.on('connection', function(socket) {
 
     socket.on('phone number', (data) =>
     {
-
         globalPhoneNumber = '+1' + data.phone.toString().replace(/-/g, '')
         globalMax = data.max
         globalMin = data.min
+        messageSent = false
+        globalC = data.isCelsius;
         console.log('phone number Updated'+globalMax+" " +globalMin+ " " + globalPhoneNumber)
-
-
-
     })
 });
 

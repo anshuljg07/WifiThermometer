@@ -4,6 +4,8 @@ let socket = io.connect('http://172.17.66.142:3000');
 socket.emit('clientType', 'frontend');
 
 masterSwitchBool = true;
+min = 0;
+max = 50;
 
 GlobalC = true;
 let ctx = document.getElementById('temperatureChart').getContext('2d');
@@ -104,6 +106,7 @@ function convertClickC(){
     tempChart.data.datasets[0].data.reverse()
 
 
+
 }
 
 function convertClickF(){
@@ -138,22 +141,26 @@ $(function () {
         data = {
             phone: tempPhone,
             min:tempMin,
-            max:tempMax
+            max:tempMax,
+            isCelsius: GlobalC
         }
         var pattern = /^\d{3}-\d{3}-\d{4}$/;
         if(pattern.test(tempPhone)){
             socket.emit('phone number', data);
             console.log(data.phone + " " + data.min + " " + data.max)
         }
+        //TODO: Say that phone number is invalid (paragraph tag)
         //socket.emit('phone number', tempPhone);
     }
     function formatThresholdMin(){
         var input = document.querySelector('#min')
         input.value = input.value.replace(/[^0-9-]/g,'')
+        min = input.value;
     }
     function formatThresholdMax(){
         var input = document.querySelector('#min')
         input.value = input.value.replace(/[^0-9-]/g,'')
+        max = input.value;
     }
     function formatPhoneNumber() {
 
