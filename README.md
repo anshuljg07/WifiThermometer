@@ -12,20 +12,20 @@
 
 --------------------------------------------------------------------------------
 
-##This repository houses the source code for a Wifi Thermometer consisting of two major components: a RaspberryPi Model 4B and a Node.js Webserver. 
+## This repository houses the source code for a Wifi Thermometer consisting of two major components: a RaspberryPi Model 4B and a Node.js Webserver. 
 
-###Raspberry Pi component:
+### Raspberry Pi component:
 - Involves peripheral hardware: ZF RR switch, DS16203 pushbutton, a standard 16x2 LCD display, a mobile power supply, and most importantly the DS18B20 Temperature sensor
 - These peripherals are managed by a python script local to the Pi, which also handles socket communication between the server
 - Can be remotely controlled through an SSH for non-local sensing
 - Processes data and sends through standard API utilizing JSON packets
 
-###Node.js WebServer component:
+### Node.js WebServer component:
 - Robust implementation capable of future scaling (track multiple sensors)
 - use of asynchronous sockets + socket rooms for multi-client communication
 - Fully implemented Twilio API for SMS messages
 
-###Dyanmic FrontEnd:
+### Dyanmic FrontEnd:
 - Utilizes vanilla HTML/CSS/JS
 - Utilizes real-time updating, resizable, and graph changing implementation of Chart.js
 - Dropdown menu to input phone number, choose temp graph, and set temperature limits
