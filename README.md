@@ -32,7 +32,7 @@ This repository houses the source code for a Wifi Thermometer consisting of two 
 # Getting Started
 ## Installing/Configuring Node.js
 '''
-###Install Node.js
+### Install Node.js
 This is the download site for the [Node.js Installer](https://nodejs.org/en/), after downloading this you will be prompted to install Node.
 ```
 node -v
