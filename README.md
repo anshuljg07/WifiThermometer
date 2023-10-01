@@ -6,11 +6,12 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 --------------------------------------------------------------------------------
 --------------------------------
-![WifiTherm3rdBox](https://github.com/anshuljg07/WifiThermometer/assets/72891464/22886ecd-c724-41ec-b6a8-af877e9926d1)
-![Wifitherm+frontendpic](https://github.com/anshuljg07/WifiThermometer/assets/72891464/e1b47a5d-66c5-4bf2-af56-bac0d4641ae6)
-------------------------------------------------
+<p float="center">
+  <img src="https://github.com/anshuljg07/WifiThermometer/assets/72891464/22886ecd-c724-41ec-b6a8-af877e9926d1" width="450" height="315"alt='YaleSoM logo'/>
+  <img src="https://github.com/anshuljg07/WifiThermometer/assets/72891464/e1b47a5d-66c5-4bf2-af56-bac0d4641ae6" width="400" height="315"alt="CTRA logo"/> 
+</p>
 
-## This repository houses the source code for a Wifi Thermometer consisting of two major components: a RaspberryPi Model 4B and a Node.js Webserver. 
+This repository houses the source code for a Wifi Thermometer consisting of two major components: a RaspberryPi Model 4B and a Node.js Webserver. 
 
 ### Raspberry Pi component:
 - Involves peripheral hardware: ZF RR switch, DS16203 pushbutton, a standard 16x2 LCD display, a mobile power supply, and most importantly the DS18B20 Temperature sensor
