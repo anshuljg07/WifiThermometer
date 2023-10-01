@@ -5,12 +5,10 @@
 ![Passing](https://camo.githubusercontent.com/0029e047a1f03572a4cc1d1f390606028f57cf6faa8cfa2f999798920970c362/68747470733a2f2f63692e6170707665796f722e636f6d2f6170692f70726f6a656374732f7374617475732f6d69616830696b667366306a333831392f6272616e63682f6d61737465723f7376673d74727565)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 --------------------------------------------------------------------------------
-<p float="center">
-  <img src="https://www.lifespan.io/wp-content/uploads/2020/06/Yale-School-of-Medicine.png" width="350" height="215"alt='YaleSoM logo'/>
-  <img src="https://ysm-res.cloudinary.com/image/upload/c_limit,f_auto,h_630,q_auto,w_1200/v1/yms/prod/4ab3b4a4-a6aa-40a0-99eb-1118be087ddd" width="350" height="215"alt="CTRA logo"/> 
-</p>
-
---------------------------------------------------------------------------------
+--------------------------------
+![WifiTherm3rdBox](https://github.com/anshuljg07/WifiThermometer/assets/72891464/22886ecd-c724-41ec-b6a8-af877e9926d1)
+![Wifitherm+frontendpic](https://github.com/anshuljg07/WifiThermometer/assets/72891464/e1b47a5d-66c5-4bf2-af56-bac0d4641ae6)
+------------------------------------------------
 
 ## This repository houses the source code for a Wifi Thermometer consisting of two major components: a RaspberryPi Model 4B and a Node.js Webserver. 
 
