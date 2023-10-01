@@ -7,8 +7,8 @@
 --------------------------------------------------------------------------------
 --------------------------------
 <p float="center">
-  <img src="https://github.com/anshuljg07/WifiThermometer/assets/72891464/22886ecd-c724-41ec-b6a8-af877e9926d1" width="450" height="315"alt='YaleSoM logo'/>
-  <img src="https://github.com/anshuljg07/WifiThermometer/assets/72891464/e1b47a5d-66c5-4bf2-af56-bac0d4641ae6" width="400" height="315"alt="CTRA logo"/> 
+  <img src="https://github.com/anshuljg07/WifiThermometer/assets/72891464/22886ecd-c724-41ec-b6a8-af877e9926d1" width="400" height="365"alt='YaleSoM logo'/>
+  <img src="https://github.com/anshuljg07/WifiThermometer/assets/72891464/e1b47a5d-66c5-4bf2-af56-bac0d4641ae6" width="400" height="365"alt="CTRA logo"/> 
 </p>
 
 This repository houses the source code for a Wifi Thermometer consisting of two major components: a RaspberryPi Model 4B and a Node.js Webserver. 
