@@ -56,7 +56,7 @@ The Raspberry Pi set up is not specially configured to this project and most tut
 Special Python packages need to be installed, which are listed in the import statments of the Temperature.py script.
 
 # The Team
-This repo is currently maintained by [Anshul Gowda](https://www.linkedin.com/in/anshul-gowda-693206200/), Rafa Rangel de la Tejera, and Joseph Bart. Feel free to reach out!
+This repo is currently maintained by [Anshul Gowda](https://www.linkedin.com/in/anshul-%E0%B2%85%E0%B2%A8%E0%B3%8D%E0%B2%B6%E0%B3%81%E0%B2%B2%E0%B3%8D-gowda-693206200/), Rafa Rangel de la Tejera, and Joseph Bart. Feel free to reach out!
 
 # Citation
 This repo is free for an academic use.
