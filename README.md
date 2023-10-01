@@ -1,4 +1,4 @@
-# WifiThermometer w/ Node.js Webserver
+# Wifi Thermometer w/ Node.js Webserver
 
 ![Passing](https://github.com/matplotlib/matplotlib/workflows/Tests/badge.svg)
 ![CodeQl Passing](https://github.com/tesseract-ocr/tesseract/workflows/CodeQL/badge.svg)
