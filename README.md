@@ -2,7 +2,6 @@
 
 ![Passing](https://github.com/matplotlib/matplotlib/workflows/Tests/badge.svg)
 ![CodeQl Passing](https://github.com/tesseract-ocr/tesseract/workflows/CodeQL/badge.svg)
-![Passing](https://camo.githubusercontent.com/0029e047a1f03572a4cc1d1f390606028f57cf6faa8cfa2f999798920970c362/68747470733a2f2f63692e6170707665796f722e636f6d2f6170692f70726f6a656374732f7374617475732f6d69616830696b667366306a333831392f6272616e63682f6d61737465723f7376673d74727565)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 --------------------------------------------------------------------------------
 --------------------------------
@@ -50,19 +49,16 @@ This project uses certain packages and running this command should install all o
 npm install
 ```
 
-##Configuring the RaspberryPi
+## Configuring the RaspberryPi
 The Raspberry Pi set up is not specially configured to this project and most tutorials touching on downloading Pi OS will suffice. The only special configuration was enabling the One-wire interface to communicates with the temperature sensor, which can be done through the settings.
 Special Python packages need to be installed, which are listed in the import statments of the Temperature.py script.
 
-# The Team
-This repo is currently maintained by [Anshul Gowda](https://www.linkedin.com/in/anshul-%E0%B2%85%E0%B2%A8%E0%B3%8D%E0%B2%B6%E0%B3%81%E0%B2%B2%E0%B3%8D-gowda-693206200/), Rafa Rangel de la Tejera, and Joseph Bart. Feel free to reach out!
+## Contributors
+This project was developed and is currently maintained by Joseph Bartosyck. Rafael Ragel de la Tejera, and Anshul Gowda
 
-# Citation
-This repo is free for an academic use.
-
-# License
-TODO: Define a license. 
-
-# Resources
-https://levelup.gitconnected.com/set-up-and-run-a-simple-node-server-project-38b403a3dc09
-
+## Get in Contact:
+ [Anshul Gowda's LinkedIn](https://www.linkedin.com/in/anshul-gowda)
+<br />
+Rafael Rangel de la Tejera's LinkedIn
+<br />
+Joseph Bartosyck's de la Tejera's LinkedIn
